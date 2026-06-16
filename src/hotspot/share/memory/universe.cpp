@@ -1331,7 +1331,7 @@ void Universe::verify(VerifyOption option, const char* prefix) {
 }
 
 static void log_cpu_time() {
-  const LogTarget(Info, cpu) cpuLog;
+  LogTarget(Info, cpu) cpuLog;
   if (!cpuLog.is_enabled()) {
     return;
   }

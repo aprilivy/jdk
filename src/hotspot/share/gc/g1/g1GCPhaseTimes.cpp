@@ -328,7 +328,7 @@ void G1GCPhaseTimes::print_thread_work_items(WorkerDataArray<double>* phase, uin
 }
 
 void G1GCPhaseTimes::debug_phase_merge_remset() const {
-  const LogTarget(Debug, gc, phases) lt;
+  LogTarget(Debug, gc, phases) lt;
   if (!lt.is_enabled()) {
     return;
   }

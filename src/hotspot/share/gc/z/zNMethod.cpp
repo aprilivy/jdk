@@ -109,7 +109,7 @@ ZReentrantLock* ZNMethod::ic_lock_for_nmethod(nmethod* nm) {
 }
 
 void ZNMethod::log_register(const nmethod* nm) {
-  const LogTarget(Debug, gc, nmethod) log;
+  LogTarget(Debug, gc, nmethod) log;
   if (!log.is_enabled()) {
     return;
   }
@@ -161,7 +161,7 @@ void ZNMethod::log_register(const nmethod* nm) {
 }
 
 void ZNMethod::log_unregister(const nmethod* nm) {
-  const LogTarget(Debug, gc, nmethod) log;
+  LogTarget(Debug, gc, nmethod) log;
   if (!log.is_enabled()) {
     return;
   }
@@ -177,7 +177,7 @@ void ZNMethod::log_unregister(const nmethod* nm) {
 }
 
 void ZNMethod::log_purge(const nmethod* nm) {
-  const LogTarget(Debug, gc, nmethod) log;
+  LogTarget(Debug, gc, nmethod) log;
   if (!log.is_enabled()) {
     return;
   }

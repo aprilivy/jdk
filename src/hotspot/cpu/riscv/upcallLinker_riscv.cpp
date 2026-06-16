@@ -171,7 +171,7 @@ address UpcallLinker::make_upcall_stub(jobject receiver, Symbol* signature,
   ArgumentShuffle arg_shuffle(in_regs, filtered_out_regs, as_VMStorage(shuffle_reg));
 
 #ifndef PRODUCT
-  const LogTarget(Trace, foreign, upcall) lt;
+  LogTarget(Trace, foreign, upcall) lt;
   if (lt.is_enabled()) {
     LogStream ls(lt);
     arg_shuffle.print_on(&ls);

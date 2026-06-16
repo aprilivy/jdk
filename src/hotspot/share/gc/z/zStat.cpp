@@ -1479,7 +1479,7 @@ void ZStatRelocation::at_relocate_end(size_t small_in_place_count, size_t medium
 }
 
 void ZStatRelocation::print_page_summary() {
-  const LogTarget(Info, gc, reloc) lt;
+  LogTarget(Info, gc, reloc) lt;
 
   if (!_selector_stats.has_relocatable_pages() || !lt.is_enabled()) {
     // Nothing to log or logging not enabled.
@@ -1538,7 +1538,7 @@ void ZStatRelocation::print_page_summary() {
 }
 
 void ZStatRelocation::print_age_table() {
-  const LogTarget(Info, gc, reloc) lt;
+  LogTarget(Info, gc, reloc) lt;
   if (!_selector_stats.has_relocatable_pages() || !lt.is_enabled()) {
     // Nothing to log or logging not enabled.
     return;
@@ -1666,7 +1666,7 @@ void ZStatReferences::set_phantom(size_t encountered, size_t discovered, size_t 
 }
 
 void ZStatReferences::print() {
-  const LogTarget(Info, gc, ref) lt;
+  LogTarget(Info, gc, ref) lt;
   if (!lt.is_enabled()) {
     // Nothing to log
     return;
