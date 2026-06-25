@@ -671,9 +671,6 @@ public final class String
     }
 
     private static String decode(Charset charset, byte[] bytes, int offset, int length) {
-        // Do not cache the CharsetDecoder created here. It is short-lived,
-        // so young-generation GC should handle it well. The ArrayDecoder
-        // fast paths below decode directly from arrays where possible.
         CharsetDecoder cd = charset.newDecoder();
         // ArrayDecoder fastpaths
         if (cd instanceof ArrayDecoder ad) {
