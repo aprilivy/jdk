@@ -200,8 +200,7 @@ public final class Util {
         var result = new Object[list.size()]; // null check
         int i = 0;
         for (var entry : list) {
-            result[i++] = TemporaryConstantPool.INSTANCE.moduleEntry(
-                    TemporaryConstantPool.INSTANCE.utf8Entry(entry.name()));
+            result[i++] = TemporaryConstantPool.INSTANCE.moduleEntry(entry);
         }
         return SharedSecrets.getJavaUtilCollectionAccess().listFromTrustedArray(result);
     }
