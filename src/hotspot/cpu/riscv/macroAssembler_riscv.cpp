@@ -541,7 +541,7 @@ void MacroAssembler::_verify_oop(Register reg, const char* s, const char* file, 
   // The length of the instruction sequence emitted should not depend
   // on the address of the char buffer so that the size of mach nodes for
   // scratch emit and normal emit matches.
-  la(t0, ExternalAddress((address)b));
+  la(t0, Address((address)b, external_word_Relocation::spec_for_immediate()));
 
   // Call indirectly to solve generation ordering problem
   ld(t1, RuntimeAddress(StubRoutines::verify_oop_subroutine_entry_address()));
@@ -738,7 +738,7 @@ void MacroAssembler::_verify_oop_addr(Address addr, const char* s, const char* f
   // The length of the instruction sequence emitted should not depend
   // on the address of the char buffer so that the size of mach nodes for
   // scratch emit and normal emit matches.
-  la(t0, ExternalAddress((address)b));
+  la(t0, Address((address)b, external_word_Relocation::spec_for_immediate()));
 
   // Call indirectly to solve generation ordering problem
   ld(t1, RuntimeAddress(StubRoutines::verify_oop_subroutine_entry_address()));
@@ -3925,11 +3925,6 @@ void MacroAssembler::load_klass(Register dst, Register src, Register tmp) {
   assert_different_registers(src, tmp);
   load_narrow_klass(dst, src);
   decode_klass_not_null(dst, tmp);
-}
-
-void MacroAssembler::load_prototype_header(Register dst, Register src, Register tmp) {
-  load_klass(dst, src, tmp);
-  ld(dst, Address(dst, Klass::prototype_header_offset()));
 }
 
 void MacroAssembler::store_klass(Register dst, Register src, Register tmp) {
@@ -7137,13 +7132,13 @@ void MacroAssembler::fast_lock(Register basic_lock, Register obj, Register tmp1,
 
   // Try to lock. Transition lock-bits 0b01 => 0b00
   assert(oopDesc::mark_offset_in_bytes() == 0, "required to avoid a la");
-  ori(mark, mark, markWord::unlocked_value);
+  ori(mark, mark, markWord::lock_neutral_value);
   if (Arguments::is_valhalla_enabled()) {
     // Mask inline_type bit such that we go to the slow path if object is an inline type
     andi(mark, mark, ~((int) markWord::inline_type_bit_in_place));
   }
 
-  xori(t, mark, markWord::unlocked_value);
+  xori(t, mark, markWord::lock_neutral_value);
   cmpxchg(/*addr*/ obj, /*expected*/ mark, /*new*/ t, Assembler::int64,
           /*acquire*/ Assembler::aq, /*release*/ Assembler::relaxed, /*result*/ t);
   bne(mark, t, slow, /* is_far */ true);
@@ -7206,7 +7201,7 @@ void MacroAssembler::fast_unlock(Register obj, Register tmp1, Register tmp2, Reg
 #ifdef ASSERT
   // Check header not unlocked (0b01).
   Label not_unlocked;
-  test_bit(t, mark, exact_log2(markWord::unlocked_value));
+  test_bit(t, mark, exact_log2(markWord::lock_neutral_value));
   beqz(t, not_unlocked);
   stop("fast_unlock already unlocked");
   bind(not_unlocked);
@@ -7214,7 +7209,7 @@ void MacroAssembler::fast_unlock(Register obj, Register tmp1, Register tmp2, Reg
 
   // Try to unlock. Transition lock bits 0b00 => 0b01
   assert(oopDesc::mark_offset_in_bytes() == 0, "required to avoid lea");
-  ori(t, mark, markWord::unlocked_value);
+  ori(t, mark, markWord::lock_neutral_value);
   cmpxchg(/*addr*/ obj, /*expected*/ mark, /*new*/ t, Assembler::int64,
           /*acquire*/ Assembler::relaxed, /*release*/ Assembler::rl, /*result*/ t);
   beq(mark, t, unlocked);
